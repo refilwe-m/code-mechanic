@@ -20,10 +20,6 @@ function App() {
 
   const [bookingDate, setBookingDate] = useState(new Date());
   const sessionName = "Code Mechanics 💻🔧 | ";
-  //const [eventName, setEventName] = useState(sessionName);
-  //const [isVisible, setIsVisible] = useState(true);
-  //const [signOutText, setSignOutText] = useState("Sign Out");
-  //const [authText, setAuthText] = useState("Authorize");
   const [content, setContent] = useState("");
 
   const authorize = async () => {
@@ -38,6 +34,7 @@ function App() {
   };
 
   const signOut = async () => {
+    setContent("");
     await supabase.auth.signOut();
   };
 
@@ -48,14 +45,14 @@ function App() {
       description:
         "Code Clinics Session to help developers with coding/technical blockers.",
       start: {
-        dateTime: bookingDate.toISOString(), // Date.toISOString() ->
-        timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone, // America/Los_Angeles
+        dateTime: bookingDate.toISOString(),
+        timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
       },
       end: {
         dateTime: new Date(
           bookingDate.setTime(bookingDate.getTime() + 1 * 60 * 60 * 1000)
-        ).toISOString(), // Date.toISOString() ->
-        timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone, // America/Los_Angeles
+        ).toISOString(),
+        timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
       },
     };
     await fetch(
@@ -63,7 +60,7 @@ function App() {
       {
         method: "POST",
         headers: {
-          Authorization: "Bearer " + session.provider_token, // Access token for google
+          Authorization: "Bearer " + session.provider_token,
         },
         body: JSON.stringify(event),
       }
@@ -72,20 +69,16 @@ function App() {
         return data.json();
       })
       .then((data) => {
-        console.log(data);
-        toast.success(
-          "Code Mechanics 💻🔧 with Refilwe Mashile created, check your Google Calendar!",
-          {
-            position: "top-center",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "dark",
-          }
-        );
+        toast.success(`${data?.summary} created, check your Google Calendar!`, {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
       });
   };
 
