@@ -4,6 +4,9 @@ import {
   useSupabaseClient,
   useSessionContext,
 } from "@supabase/auth-helpers-react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import DateTimePicker from "react-datetime-picker";
 import CalendarIcon from "./assets/calendar.svg";
 import "./App.css";
@@ -21,9 +24,7 @@ function App() {
   //const [isVisible, setIsVisible] = useState(true);
   //const [signOutText, setSignOutText] = useState("Sign Out");
   //const [authText, setAuthText] = useState("Authorize");
-  const [content, setContent] = useState(
-    "Test Data:\nEvent 1: 10 Dec 2023 11:45 🔴\nEvent 2: 10 Feb 2023 10:30 🔴"
-  );
+  const [content, setContent] = useState("");
 
   const authorize = async () => {
     const { error } = await supabase.auth.signInWithOAuth({
@@ -72,7 +73,19 @@ function App() {
       })
       .then((data) => {
         console.log(data);
-        alert("Event created, check your Google Calendar!");
+        toast.success(
+          "Code Mechanics 💻🔧 with Refilwe Mashile created, check your Google Calendar!",
+          {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          }
+        );
       });
   };
 
@@ -105,6 +118,18 @@ function App() {
           >
             Book Session
           </button>
+          <ToastContainer
+            position="top-center"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="dark"
+          />
         </section>
       ) : (
         <button id="authorize_button" onClick={authorize}>
